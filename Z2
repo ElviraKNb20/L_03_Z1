@@ -1,0 +1,94 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+class Circle {
+    private double radius;
+    private double x;
+    private double y;
+
+    public Circle(double radius, double x, double y) {
+        this.radius = radius;
+        this.x = x;
+        this.y = y;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getArea() {
+        return Math.PI * radius * radius;
+    }
+
+    public double getPerimeter() {
+        return 2 * Math.PI * radius;
+    }
+
+    // Метод для обчислення відстані між центрами двох кол
+    public double distanceTo(Circle other) {
+        double dx = this.x - other.x;
+        double dy = this.y - other.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    @Override
+    public String toString() {
+        return "Circle [radius=" + radius + ", x=" + x + ", y=" + y + "]";
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Circle[] circles = {
+                new Circle(3.0, 1.0, 2.0),
+                new Circle(2.5, 3.0, 4.0),
+                new Circle(4.0, 5.0, 6.0),
+                new Circle(2.0, 7.0, 8.0)
+        };
+
+        // Знаходимо найбільший і найменший за площею коло
+        Circle maxAreaCircle = circles[0];
+        Circle minAreaCircle = circles[0];
+
+        for (Circle circle : circles) {
+            if (circle.getArea() > maxAreaCircle.getArea()) {
+                maxAreaCircle = circle;
+            }
+            if (circle.getArea() < minAreaCircle.getArea()) {
+                minAreaCircle = circle;
+            }
+        }
+
+        // Знаходимо найбільший і найменший за периметром коло
+        Circle maxPerimeterCircle = circles[0];
+        Circle minPerimeterCircle = circles[0];
+
+        for (Circle circle : circles) {
+            if (circle.getPerimeter() > maxPerimeterCircle.getPerimeter()) {
+                maxPerimeterCircle = circle;
+            }
+            if (circle.getPerimeter() < minPerimeterCircle.getPerimeter()) {
+                minPerimeterCircle = circle;
+            }
+        }
+
+        System.out.println("Коло з найбільшою площею: " + maxAreaCircle);
+        System.out.println("Площа: " + maxAreaCircle.getArea());
+        System.out.println("Коло з найменшою площею: " + minAreaCircle);
+        System.out.println("Площа: " + minAreaCircle.getArea());
+
+        System.out.println("Коло з найбільшим периметром: " + maxPerimeterCircle);
+        System.out.println("Периметр: " + maxPerimeterCircle.getPerimeter());
+        System.out.println("Коло з найменшим периметром: " + minPerimeterCircle);
+        System.out.println("Периметр: " + minPerimeterCircle.getPerimeter());
+    }
+}
