@@ -1,0 +1,90 @@
+import java.util.function.Function;
+
+public class DefiniteIntegral {
+    private Function<Double, Double> integrand;
+    private double a; // Нижня межа інтегрування
+    private double b; // Верхня межа інтегрування
+
+    public DefiniteIntegral(Function<Double, Double> integrand, double a, double b) {
+        this.integrand = integrand;
+        this.a = a;
+        this.b = b;
+    }
+
+    public double calculateLeftRectangles(int n) {
+        double dx = (b - a) / n;
+        double sum = 0.0;
+        for (int i = 0; i < n; i++) {
+            double x = a + i * dx;
+            sum += integrand.apply(x);
+        }
+        return sum * dx;
+    }
+
+    public double calculateRightRectangles(int n) {
+        double dx = (b - a) / n;
+        double sum = 0.0;
+        for (int i = 1; i <= n; i++) {
+            double x = a + i * dx;
+            sum += integrand.apply(x);
+        }
+        return sum * dx;
+    }
+
+    public double calculateMidpointRectangles(int n) {
+        double dx = (b - a) / n;
+        double sum = 0.0;
+        for (int i = 0; i < n; i++) {
+            double x = a + (i + 0.5) * dx;
+            sum += integrand.apply(x);
+        }
+        return sum * dx;
+    }
+
+    public double calculateTrapezoidal(int n) {
+        double dx = (b - a) / n;
+        double sum = 0.0;
+        for (int i = 0; i < n; i++) {
+            double x1 = a + i * dx;
+            double x2 = a + (i + 1) * dx;
+            sum += 0.5 * (integrand.apply(x1) + integrand.apply(x2));
+        }
+        return sum * dx;
+    }
+
+    public double calculateSimpson(int n) {
+        if (n % 2 != 0) {
+            throw new IllegalArgumentException("n должно быть четным для метода Симпсона");
+        }
+
+        double dx = (b - a) / n;
+        double sum = integrand.apply(a) + integrand.apply(b);
+
+        for (int i = 1; i < n; i++) {
+            double x = a + i * dx;
+            sum += i % 2 == 0 ? 2 * integrand.apply(x) : 4 * integrand.apply(x);
+        }
+
+        return sum * dx / 3.0;
+    }
+    public static void main(String[] args) {
+        Function<Double, Double> integrand = x -> x * x; // Приклад аналітичної функції
+        double a = 1.0; // Нижня межа інтегрування
+        double b = 3.0; // Верхня межа інтегрування
+        int n = 100; // Кількість підінтервалів
+
+        DefiniteIntegral integral = new DefiniteIntegral(integrand, a, b);
+
+        double leftRectanglesResult = integral.calculateLeftRectangles(n);
+        double rightRectanglesResult = integral.calculateRightRectangles(n);
+        double midpointRectanglesResult = integral.calculateMidpointRectangles(n);
+        double trapezoidalResult = integral.calculateTrapezoidal(n);
+        double simpsonResult = integral.calculateSimpson(n);
+
+        System.out.println("Результат методу лівих прямокутників: " + leftRectanglesResult);
+        System.out.println("Результат методу правих прямокутників: " + rightRectanglesResult);
+        System.out.println("Результат методу середніх прямокутників: " + midpointRectanglesResult);
+        System.out.println("Результат методу трапецій: " + trapezoidalResult);
+        System.out.println("Результат методу Сімпсона: " + simpsonResult);
+    }
+}
